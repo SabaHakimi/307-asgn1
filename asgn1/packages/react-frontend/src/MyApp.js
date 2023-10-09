@@ -9,8 +9,10 @@ function MyApp() {
     fetchUsers()
 	    .then((res) => res.json())
 	    .then((json) => setCharacters(json["users_list"]))
-	    .catch((error) => { console.log(error); });
-  }, [] );
+	    .catch((error) => { 
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="container">
@@ -21,12 +23,27 @@ function MyApp() {
   );
  
   function removeOneCharacter (index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index
-    });
-    setCharacters(updated);
-  } 
+    const idToDelete = characters[index].id;
 
+    fetch(`http://localhost:8000/users/${idToDelete}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.status === 204) {
+          const updatedCharacters = characters.filter((character) => character.id !== idToDelete
+          );
+          setCharacters(updatedCharacters);
+        } else if (response.status === 404) {
+          console.log("User not found.");
+        } else {
+          console.log("Failed to delete user.");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+    
   function updateList(person) { 
     postUser(person)
       .then((response) => {
@@ -60,6 +77,7 @@ function MyApp() {
 
     return promise;
   }
+
 }
 
 export default MyApp;

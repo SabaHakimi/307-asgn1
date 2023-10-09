@@ -53,10 +53,13 @@ const addUser = (user) => {
     return user;
 }
 
-const deleteUser = (id) => {
-   const userIndex = users['users_list'].findIndex((user) => user['id'] === id);
+const deleteUserById = (id) => {
+   const userIndex = users['users_list'].findIndex((user) => user["id"] == id);
+   console.log(`User index: ${userIndex}`);
    if (userIndex != -1) {
+      console.log(`User index is not -1`);
       const deletedUser = users['users_list'].splice(userIndex, 1)[0];
+      console.log(`Returning deletedUser.id: ${deletedUser.id}`);
       return deletedUser.id;
    } else {
       return null;
@@ -128,13 +131,15 @@ app.post('/users', (req, res) => {
 });
 
 app.delete('/users/:id', (req, res) => {
-   const id = req.params.id;
-   const deletedId = deleteUser(id);
+   const id = req.params["id"];
+   const result = deleteUserById(id);
 
-   if (deletedId != null) {
-      res.send(`User with ID ${deletedId} has been deleted.`);
+   if (result != null) {
+      console.log(`Successful delete. Sending 204 to frontend.`);
+      res.status(204).send("User has been deleted.");
    } else {
       res.status(404).send("User not found.");
+      console.log(`Delete unsuccessful. Sending 404 to frontend`);
    }
 });
 
