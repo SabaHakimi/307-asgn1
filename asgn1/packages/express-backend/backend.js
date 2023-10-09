@@ -124,7 +124,7 @@ app.post('/users', (req, res) => {
     userToAdd.id = randomId;
 
     addUser(userToAdd);
-    res.status(201).send('Content Created');
+    res.status(201).json(userToAdd);
 });
 
 app.delete('/users/:id', (req, res) => {
