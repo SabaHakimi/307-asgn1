@@ -6,7 +6,9 @@
   "description": "",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
   "scripts": {
     "start": "cd react-frontend && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"

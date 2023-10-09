@@ -2,6 +2,7 @@ import express from "express";
 
 const app = express();
 const port = 8000;
+
 const users = { 
    users_list : [
       { 
@@ -32,6 +33,11 @@ const users = {
    ]
 }
 
+const findUserByName = (name) => { 
+    return users['users_list']
+        .filter( (user) => user['name'] === name); 
+}
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -39,7 +45,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-   res.send(users);
+    const name = req.query.name;
+    if (name != undefined){
+        let result = findUserByName(name);
+        result = {users_list: result};
+        res.send(result);
+    }
+    else{
+        res.send(users);
+    }
 });
 
 app.listen(port, () => {
