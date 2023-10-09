@@ -63,6 +63,25 @@ const deleteUser = (id) => {
    }
 }
 
+function generateRandomId() {
+   const idLength = 6;
+   const characters = 'abcdefghijklmnopqrstuvwxyz';
+   const numbers = '0123456789'
+   let randomId = '';
+
+   for (let i = 0; i < idLength; i++) {
+      if (i < idLength / 2) {
+         const randomIndex = Math.floor(Math.random() * characters.length);
+         randomId += characters.charAt(randomIndex);
+      } else {
+         const randomIndex = Math.floor(Math.random() * numbers.length);
+         randomId += numbers.charAt(randomIndex);
+      }
+   }
+
+   return randomId;
+}
+
 app.use(cors());
 
 app.use(express.json());
@@ -101,6 +120,9 @@ app.get('/users/:id', (req, res) => {
 
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
+    const randomId = generateRandomId();
+    userToAdd.id = randomId;
+
     addUser(userToAdd);
     res.status(201).send('Content Created');
 });
